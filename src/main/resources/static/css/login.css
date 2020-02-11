@@ -1,0 +1,16 @@
+body {
+    color: #525253;
+    
+    background: url('https://www.cnmp.mp.br/portal/templates/shaper_interagi/images/bg/bg_cnmp-home.png') no-repeat top center;
+    background-size: 100%;
+    background-position: auto;
+    background-attachment: fixed;
+}
+
+.text {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: xx-large;
+    font-weight: bold;
+    color: #525252;
+    margin-top: 20px;
+}

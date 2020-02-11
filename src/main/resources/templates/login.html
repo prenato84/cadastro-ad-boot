@@ -2,19 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
+        <meta charset="utf-8">
         <title>Login Exemplo</title>
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+        <link href="../static/css/panels.css" th:href="@{/css/login.css}" rel="stylesheet" media="screen"/>
     </head>
     <body>
-        <div th:if="${param.error}">
-            Nome de usuário e/ou senha inválidos.
+        <div class="container">
+            <form class="form-signin" th:action="@{/login}" method="post">
+                <img src="../static/images/logo-cnmp.png" width="200px" th:src="@{/images/logo-cnmp.png}" /> <p></p>
+
+                <div class="alert alert-danger" role="alert" th:if="${param.error}">Usuário ou senha inválidos.</div>
+                <div class="alert alert-success" role="alert" th:if="${param.logout}">Log out executado com sucesso.</div>  <p></p>
+
+                <h2 class="form-signin-heading">Faça o login</h2>
+                <p>
+                    <label for="username" class="sr-only">Nome de Usuário:</label> 
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus/>
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Senha:</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required>
+                </p>
+
+                <input name="_csrf" type="hidden" value="4ddb0e5e-0a44-49ad-a99e-7808e3faa0fa" />
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+            </form>
         </div>
-        <div th:if="${param.logout}">
-            Log out executado com sucesso.
-        </div>
-        <form th:action="@{/login}" method="post">
-            <div><label> Nome de Usuário (usuario): <input type="text" name="username"/> </label></div>
-            <div><label> Senha (senha): <input type="password" name="password"/> </label></div>
-            <div><input type="submit" value="Entrar"/></div>
-        </form>
     </body>
 </html>
