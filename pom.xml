@@ -60,6 +60,23 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!--WebJars Bootstrap, Jquery e Jquery UI -->
+			<!-- Permite que as versões dos webjars fiquem agnósticas em relação à versão. basta adicionar essa dependência e remover as versões -->
+			<!-- <dependency>
+		        <groupId>org.webjars</groupId>
+		        <artifactId>webjars-locator</artifactId>
+		        <version>0.38</version>
+		    </dependency> -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>4.4.1-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.4.1</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
