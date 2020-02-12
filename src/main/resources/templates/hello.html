@@ -2,20 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"></html>
     <head>
         <title>Hello</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
-        <h1 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h1>
-        <div sec:authorize="hasRole('USER')">Texto visível ao user.</div>
-        <div sec:authorize="hasRole('ADMIN')">Texto visível ao admin.</div>
-        <div sec:authorize="isAuthenticated()">
-            Texto visível apenas aos usuários autenticados.
+        <div class="container">
+            <h1 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h1> </p>
+            <div sec:authorize="hasRole('USER')">Texto visível ao user.</div> </p>
+            <div sec:authorize="hasRole('ADMIN')">Texto visível ao admin.</div> </p>
+            <div class="alert alert-primary" role="alert" sec:authorize="hasRole('ADM_DOMINIO')">Texto visível aos admins de domínio.</div> </p>
+            <div class="alert alert-success" role="alert" sec:authorize="isAuthenticated()">
+                Texto visível apenas aos usuários autenticados.
+            </div> </p>
+            Usuário autenticado:
+            <div style="color: blue" sec:authentication="name">Bob</div> </p>
+            Papéis do usuário autenticado:
+            <div style="color: red" sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</div> </p>
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-info" type="submit" value="Sair">Sair</button>
+            </form>
         </div>
-        Usuário autenticado:
-        <div sec:authentication="name"></div>
-        Papéis do usuário autenticado:
-        <div sec:authentication="principal.authorities"></div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sair"/>
-        </form>
     </body>
 </html>
