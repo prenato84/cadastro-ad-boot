@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"></html>
     <head>
         <title>Hello</title>
     </head>
     <body>
         <h1 th:inline="text">Olá [[${#httpServletRequest.remoteUser}]]!</h1>
+        <div sec:authorize="hasRole('USER')">Texto visível ao user.</div>
+        <div sec:authorize="hasRole('ADMIN')">Texto visível ao admin.</div>
+        <div sec:authorize="isAuthenticated()">
+            Texto visível apenas aos usuários autenticados.
+        </div>
+        Usuário autenticado:
+        <div sec:authentication="name"></div>
+        Papéis do usuário autenticado:
+        <div sec:authentication="principal.authorities"></div>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sair"/>
         </form>

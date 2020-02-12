@@ -42,8 +42,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// Configura as autorizações/permissões
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home").permitAll().anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().and().logout().permitAll();
+		http.authorizeRequests()
+				.antMatchers("/", "/login").permitAll()
+				//.antMatchers("/hello/**").access("hasRole('ADMIN') and hasRole('USER')")
+				.anyRequest()
+				.authenticated()
+				.and()
+			.formLogin()
+				.loginPage("/login")
+				.defaultSuccessUrl("/hello")
+				.permitAll()
+				.and()
+				.logout()
+				.permitAll();
 	}
 
 	// Configura a autenticação pelo LDAP ou em memória para testes
@@ -51,13 +62,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 		if (Boolean.parseBoolean(ldapEnabled)) {
-			auth.ldapAuthentication().userSearchBase(ldapUserSearchBase)
-					.userSearchFilter("(" + ldapUserSearchFilter + ")").groupSearchBase(ldapGroupSearchBase)
-					.groupSearchFilter(ldapGroupSearchFilter).contextSource().url(ldapUrl)
+			auth.ldapAuthentication()
+					.userSearchBase(ldapUserSearchBase)
+					.userSearchFilter("(" + ldapUserSearchFilter + ")")
+					.groupSearchBase(ldapGroupSearchBase)
+					.groupSearchFilter(ldapGroupSearchFilter)
+					.contextSource()
+					.url(ldapUrl)
 					.port(Integer.parseInt(ldapPort))
 					// .url("ldaps://hurley1.cnmp.ad/DC=cnmp,DC=ad")
 					// .port(639)
-					.managerDn(ldapManagerDn).managerPassword(ldapPasswordDn);
+					.managerDn(ldapManagerDn)
+					.managerPassword(ldapPasswordDn);
 		} else {
 			auth
 				.inMemoryAuthentication()
