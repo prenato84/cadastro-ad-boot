@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <head>
-        <title>Login</title>
+        <title>Login 2</title>
 
         <div th:insert="fragments/header_files :: headerfiles"></div>
 
-        <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
         <link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" media="screen"/>
       
     </head>
     <body>
-        <div class="container">
-            <form class="form-signin" th:action="@{/login}" method="post">
-                <img src="../static/images/logo-cnmp.png" width="200px" th:src="@{/images/logo-cnmp.png}" /> <p></p>
 
-                <div class="alert alert-danger" role="alert" th:if="${param.error}">Usuário ou senha inválidos.</div>
-                <div class="alert alert-success" role="alert" th:if="${param.logout}">Log out executado com sucesso.</div>  <p></p>
+        <div class="container-fluid">
+            <div class="row no-gutter">
+              <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+              <div class="col-md-8 col-lg-6">
+                <div class="login d-flex align-items-center py-5">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-9 col-lg-8 mx-auto">
+                        <h3 class="login-heading mb-4">Sistema de Cadastro</h3>
 
-                <h2 class="form-signin-heading">Faça o login</h2>
-                <p>
-                    <label for="username" class="sr-only">Nome de Usuário:</label> 
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required autofocus/>
-                </p>
-                <p>
-                    <label for="password" class="sr-only">Senha:</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required>
-                </p>
+                        <div class="alert alert-danger" role="alert" th:if="${param.error}">Usuário ou senha inválidos.</div>
+                        <div class="alert alert-success" role="alert" th:if="${param.logout}">Log out executado com sucesso.</div>  <p></p>
 
-                <input name="_csrf" type="hidden" value="4ddb0e5e-0a44-49ad-a99e-7808e3faa0fa" />
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-            </form>
+                        <form class="form-signin" th:action="@{/login}" method="post">
+                            <div class="form-label-group">
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Usuário" required autofocus>
+                                <label for="username">Usuário</label>
+                            </div>
+            
+                            <div class="form-label-group">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required>
+                                <label for="password">Senha</label>
+                            </div>
+            
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Lembrar senha</label>
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Entrar</button>
+                            <div class="text-center">
+                                <a class="small" >Serviço de Atendimento ao Usuário - SERVSAT - ©2020</a></div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
     </body>
 </html>
