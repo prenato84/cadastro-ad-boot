@@ -1,31 +1,119 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        
+        <link rel="apple-touch-icon" type="image/png" href="https://static.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+        <meta name="apple-mobile-web-app-title" content="CodePen">
+        <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+        <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+        <title>CodePen - 403 Forbidden | cpc-403</title>
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Cabin|Ubuntu:700'>
+        <style>
+        body {
+        background-color: #332851;
+        }
+        body .base {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-direction: column;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        }
+        body .base h1 {
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        font-family: 'Ubuntu', sans-serif;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 30vw;
+        display: block;
+        margin: 0;
+        color: #9ae1e2;
+        position: relative;
+        z-index: 0;
+        animation: colors .4s ease-in-out forwards;
+        animation-delay: 1.7s;
+        }
+        body .base h1:before {
+        content: "U";
+        position: absolute;
+        top: -9%;
+        right: 40%;
+        transform: rotate(180deg);
+        font-size: 15vw;
+        color: #f6c667;
+        z-index: -1;
+        text-align: center;
+        animation: lock .2s ease-in-out forwards;
+        animation-delay: 1.5s;
+        }
+        body .base h2 {
+        font-family: 'Cabin', sans-serif;
+        color: #9ae1e2;
+        font-size: 5vw;
+        margin: 0;
+        text-transform: uppercase;
+        text-align: center;
+        animation: colors .4s ease-in-out forwards;
+        animation-delay: 2s;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        }
+        body .base h5 {
+        font-family: 'Cabin', sans-serif;
+        color: #9ae1e2;
+        font-size: 2vw;
+        margin: 0;
+        text-align: center;
+        opacity: 0;
+        animation: show 2s ease-in-out forwards;
+        color: #ca3074;
+        animation-delay: 3s;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        }
 
-	<head>
-		<title>Erro 403</title>
+        @keyframes lock {
+        50% {
+            top: -4%;
+        }
+        100% {
+            top: -6%;
+        }
+        }
+        @keyframes colors {
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            color: #ca3074;
+        }
+        }
+        @keyframes show {
+        100% {
+            opacity: 1;
+        }
+        }
+        </style>
+        <script>
+        window.console = window.console || function(t) {};
+        </script>
+        <script>
+        if (document.location.search.match(/type=embed/gi)) {
+            window.parent.postMessage("resize", "*");
+        }
+        </script>
+    </head>
 
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}" />
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
-
-		<script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3.4.1/dist/jquery.min.js" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
-	</head>
-
-	<body>
-
-	<div class="container">
-
-		<div class="jumbotron">
-		<div class="row text-center">
-			<img src="../static/images/403forbidden.png" width="280" th:src="@{/images/403forbidden.png}"/>
-			<h2>Erro 403 - Acesso Negado!</h2>
-			<h3 style="color:red">Você nâo tem permissão de acesso a essa página</h3>
-			<form th:action="@{/login}" method="post">
-				<button class="btn btn-lg btn-danger" type="submit" value="Voltar">Voltar</button>
-			</form>
-		</div>
-		</div>
-		
-	</div>
-
-	</body>
+    <body translate="no">
+        <div class="base io">
+        <h1 class="io">403</h1>
+        <h2>Acesso negado</h2>
+        <h5>Retornar ao <a target="_blank" href="http://localhost:8080/">Login</a></h5>
+        </div>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    </body>
 </html>
