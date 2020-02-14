@@ -18,18 +18,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${ldap.port}")
 	private String ldapPort;
 
-	@Value("${ldap.user.search.base}")
-	private String ldapUserSearchBase;
-
-	@Value("${ldap.user.search.filter}")
-	private String ldapUserSearchFilter;
-
-	@Value("${ldap.group.search.base}")
-	private String ldapGroupSearchBase;
-
-	@Value("${ldap.group.search.filter}")
-	private String ldapGroupSearchFilter;
-
 	@Value("${ldap.manager.dn}")
 	private String ldapManagerDn;
 
@@ -45,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/", "/login", "/webjars/**").permitAll()
 				//.antMatchers("/hello/**").access("hasRole('ADM_DOMINIO') and hasRole('USER')")
-				.antMatchers("/hello/**").access("hasRole('ADM_DOMINIO')")
+				.antMatchers("/hello/**").access("hasRole('GP_ZEN_ADMIN')")
 				.anyRequest()
 				.authenticated()
 				.and()
@@ -63,21 +51,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 		if (Boolean.parseBoolean(ldapEnabled)) {
+			// usuários da OU=STI
 			auth.ldapAuthentication()
-					.userSearchBase(ldapUserSearchBase)
-					.userSearchFilter("(" + ldapUserSearchFilter + ")")
-					.groupSearchBase(ldapGroupSearchBase)
-					.groupSearchFilter(ldapGroupSearchFilter)
+					.userSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+					.userSearchFilter("(sAMAccountName={0})")
+					.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+					.groupSearchFilter("member={0}")
 					.contextSource()
 					.url(ldapUrl)
 					.port(Integer.parseInt(ldapPort))
-					// .url("ldaps://hurley1.cnmp.ad/DC=cnmp,DC=ad")
-					// .port(639)
+					.managerDn(ldapManagerDn)
+					.managerPassword(ldapPasswordDn);
+			// usuários da OU=Terceirizados
+			auth.ldapAuthentication()
+					.userSearchBase("ou=Terceirizados,ou=eDirectory,DC=cnmp,DC=ad")
+					.userSearchFilter("(sAMAccountName={0})")
+					/* base de busca dos grupos de permissões principais (usuário tem que ser membro de um dos grupos dessa OU, que posteriormente é
+					filtrado na página HTML por meio do Thymeleaf Sec) */
+					.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+					.groupSearchFilter("member={0}")
+					.contextSource()
+					.url(ldapUrl)
+					.port(Integer.parseInt(ldapPort))
 					.managerDn(ldapManagerDn)
 					.managerPassword(ldapPasswordDn);
 		} else {
-			auth
-				.inMemoryAuthentication()
+			// usuários em memória (alterar a propriedade "ldap.enabled= false")
+			auth.inMemoryAuthentication()
 					.withUser("user").password("{noop}user").roles("USER")
 					.and()
 					.withUser("admin").password("{noop}admin").roles("ADMIN");
