@@ -39,6 +39,8 @@
                                 <label class="custom-control-label" for="customCheck1">Lembrar senha</label>
                             </div>
                             <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Entrar</button>
+                            <!-- Spring Security injeta o token de proteção contra ataques de CSRF -->
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <div class="text-center">
                                 <a class="small" >Serviço de Atendimento ao Usuário - SERVSAT - ©2020</a></div>
                         </form>

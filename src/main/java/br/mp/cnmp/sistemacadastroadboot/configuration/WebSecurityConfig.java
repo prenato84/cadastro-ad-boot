@@ -1,6 +1,7 @@
 package br.mp.cnmp.sistemacadastroadboot.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,10 +9,14 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/*
+** Classe responsável pela configuração, autenticação, autorização e permissão de acesso do Spring Security e do Spring Security LDAP
+*/
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	// Associa os valores setados em application.properties
 	@Value("${ldap.url}")
 	private String ldapUrl;
 
@@ -27,11 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${ldap.enabled}")
 	private String ldapEnabled;
 
-	// Configura as autorizações/permissões
+	// Configura as autorizações/permissões de segurança do Spring Security
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/", "/login", "/webjars/**").permitAll()
+				// essa configuração substitui o último método dessa classe, autorizando o acesso aos recursos estáticos
+				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+				//.antMatchers("/", "/login", "/webjars/**").permitAll()
 				//.antMatchers("/hello/**").access("hasRole('ADM_DOMINIO') and hasRole('USER')")
 				.antMatchers("/hello/**").access("hasRole('GP_ZEN_ADMIN')")
 				.anyRequest()
@@ -46,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll();
 	}
 
-	// Configura a autenticação pelo LDAP ou em memória para testes
+	// Configura a autenticação pelo LDAP (Spring Security LDAP) ou em memória para testes
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -80,15 +87,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			auth.inMemoryAuthentication()
 					.withUser("user").password("{noop}user").roles("USER")
 					.and()
-					.withUser("admin").password("{noop}admin").roles("ADMIN");
+					.withUser("admin").password("{noop}admin").roles("GP_ZEN_ADMIN");
 		}
 	}
 
 	// Exclui os diretórios abaixo da camada de segurança do Spring Security
-	@Override
+	/* @Override
 	public void configure(WebSecurity web) throws Exception {
 	    web
 	       .ignoring()
 	       .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
-    }
+    } */
 }
