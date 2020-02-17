@@ -37,6 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${ldap.enabled}")
 	private String ldapEnabled;
 
+	@Value("${ldap.embedded}")
+	private String ldapEmbedded;
+
 	@Autowired
 	Environment env;
 
@@ -66,30 +69,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 		if (Boolean.parseBoolean(ldapEnabled)) {
-			// usuários da OU=STI
-			auth.ldapAuthentication()
-					.userSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
-					.userSearchFilter("(sAMAccountName={0})")
+			if (!Boolean.parseBoolean(ldapEmbedded)) {
+				// usuários da OU=STI
+				auth.ldapAuthentication()
+						.userSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+						.userSearchFilter("(sAMAccountName={0})")
+						.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+						.groupSearchFilter("member={0}")
+						.contextSource()
+						.url(ldapUrl)
+						.port(Integer.parseInt(ldapPort))
+						.managerDn(ldapManagerDn)
+						.managerPassword(ldapPasswordDn);
+				// usuários da OU=Terceirizados
+				auth.ldapAuthentication()
+						.userSearchBase("ou=Terceirizados,ou=eDirectory,DC=cnmp,DC=ad")
+						.userSearchFilter("(sAMAccountName={0})")
+						// base de busca dos grupos de permissões principais (usuário tem que ser membro de um dos grupos dessa OU, que posteriormente é
+						// filtrado na página HTML por meio do Thymeleaf Sec)
+						.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+						.groupSearchFilter("member={0}")
+						.contextSource()
+						.url(ldapUrl)
+						.port(Integer.parseInt(ldapPort))
+						.managerDn(ldapManagerDn)
+						.managerPassword(ldapPasswordDn);
+			// ldapEmbedded = true => servidor LDAP UnboundID
+			} else {
+				auth.ldapAuthentication()
+					.userSearchFilter("sAMAccountName={0}")
 					.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
 					.groupSearchFilter("member={0}")
 					.contextSource()
-					.url(ldapUrl)
-					.port(Integer.parseInt(ldapPort))
+						.url("ldap://localhost:389")
 					.managerDn(ldapManagerDn)
 					.managerPassword(ldapPasswordDn);
-			// usuários da OU=Terceirizados
-			auth.ldapAuthentication()
-					.userSearchBase("ou=Terceirizados,ou=eDirectory,DC=cnmp,DC=ad")
-					.userSearchFilter("(sAMAccountName={0})")
-					// base de busca dos grupos de permissões principais (usuário tem que ser membro de um dos grupos dessa OU, que posteriormente é
-					// filtrado na página HTML por meio do Thymeleaf Sec)
-					.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
-					.groupSearchFilter("member={0}")
-					.contextSource()
-					.url(ldapUrl)
-					.port(Integer.parseInt(ldapPort))
-					.managerDn(ldapManagerDn)
-					.managerPassword(ldapPasswordDn);
+				// usuários da OU=Terceirizados
+				auth.ldapAuthentication()
+						.userSearchBase("ou=Terceirizados,ou=eDirectory,DC=cnmp,DC=ad")
+						.userSearchFilter("(sAMAccountName={0})")
+						// base de busca dos grupos de permissões principais (usuário tem que ser membro de um dos grupos dessa OU, que posteriormente é
+						// filtrado na página HTML por meio do Thymeleaf Sec)
+						.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
+						.groupSearchFilter("member={0}")
+						.contextSource()
+							.url("ldap://localhost:389")
+						.managerDn(ldapManagerDn)
+						.managerPassword(ldapPasswordDn);
+			}
+		// ldapEnabled = false => autenticação em memória
 		} else {
 			// usuários em memória (alterar a propriedade "ldap.enabled= false")
 			auth.inMemoryAuthentication()
@@ -99,42 +127,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 	}
 
-	// Configura a autenticação pelo LDAP (Spring Security LDAP) no srevidor de teste UnboundID
-	/* @Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-		// usuários da OU=STI
-		auth.ldapAuthentication()
-				// dn: CN=Paulo Renato Alves de Melo Castro,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-				.userSearchFilter("sAMAccountName={0}")
-				.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
-				.groupSearchFilter("member={0}")
-				.contextSource()
-					.url("ldap://localhost:389")
-				.managerDn("cn=ldapUserApp,ou=STI,ou=eDirectory,dc=cnmp,DC=ad")
-				.managerPassword("Mudarsenh@");
-		// usuários da OU=Terceirizados
-		auth.ldapAuthentication()
-				.userSearchBase("ou=Terceirizados,ou=eDirectory,DC=cnmp,DC=ad")
-				.userSearchFilter("(sAMAccountName={0})")
-				// base de busca dos grupos de permissões principais (usuário tem que ser membro de um dos grupos dessa OU, que posteriormente é
-				// filtrado na página HTML por meio do Thymeleaf Sec)
-				.groupSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
-				.groupSearchFilter("member={0}")
-				.contextSource()
-				.url("ldap://localhost:389")
-				.managerDn("cn=ldapUserApp,ou=STI,ou=eDirectory,dc=cnmp,DC=ad")
-				.managerPassword("Mudarsenh@");
-	} */
-
 	/*
 	** Autenticação pelo servidor embedded LDAP de TESTE (UnboundID)  
 	 */
-	/* @Bean
+	@Bean
 	public DefaultSpringSecurityContextSource contextSource() {
-		return  new DefaultSpringSecurityContextSource(Arrays.asList("ldap://localhost:" 
-					+ env.getRequiredProperty("spring.ldap.embedded.port") + "/"), env.getRequiredProperty("spring.ldap.embedded.base-dn"));
-	} */
+		if (Boolean.parseBoolean(ldapEmbedded)) {
+			return  new DefaultSpringSecurityContextSource(Arrays.asList("ldap://localhost:" 
+						+ env.getRequiredProperty("spring.ldap.embedded.port") + "/"), env.getRequiredProperty("spring.ldap.embedded.base-dn"));
+		} else {
+			return  new DefaultSpringSecurityContextSource(Arrays.asList("ldap://hurley1.cnmp.ad:" 
+						+ "389" + "/"), "DC=cnmp,DC=ad");
+		}
+	}
 
 	// Exclui os diretórios abaixo da camada de segurança do Spring Security
 	/* @Override
