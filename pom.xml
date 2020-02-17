@@ -59,6 +59,10 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		 <dependency>
+            <groupId>com.unboundid</groupId>
+            <artifactId>unboundid-ldapsdk</artifactId>
+        </dependency>
 
 		<!--WebJars Bootstrap, Jquery e Jquery UI -->
 			<!-- Permite que as versões dos webjars fiquem agnósticas em relação à versão. basta adicionar essa dependência e remover as versões -->
