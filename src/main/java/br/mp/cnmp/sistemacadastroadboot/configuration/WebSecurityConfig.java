@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
+import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 
 /*
 ** Classe responsável pela configuração, autenticação, autorização e permissão de acesso do Spring Security e do Spring Security LDAP
@@ -70,6 +71,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		if (Boolean.parseBoolean(ldapEnabled)) {
 			if (!Boolean.parseBoolean(ldapEmbedded)) {
+				ActiveDirectoryLdapAuthenticationProvider adProvider = 
+                    new ActiveDirectoryLdapAuthenticationProvider("cnmp.ad","ldap://hurley1.cnmp.ad:389");
+				adProvider.setConvertSubErrorCodesToExceptions(true);
+				adProvider.setUseAuthenticationRequestCredentials(true);
+		
+				// set pattern if it exists
+				// The following example would authenticate a user if they were a member
+				// of the ServiceAccounts group
+				// (&(objectClass=user)(userPrincipalName={0})
+				//   (memberof=CN=ServiceAccounts,OU=alfresco,DC=mycompany,DC=com))
+				adProvider.setSearchFilter("(&(objectClass=user)(userPrincipalName={0})(memberOf=CN=GP_ZEN_ADMIN,OU=STI,OU=eDirectory,DC=cnmp,DC=ad))");
+				
+				auth.authenticationProvider(adProvider);
+				
+				// don't erase credentials if you plan to get them later
+				// (e.g using them for another web service call)
+				auth.eraseCredentials(false);
+				/* 
 				// usuários da OU=STI
 				auth.ldapAuthentication()
 						.userSearchBase("ou=STI,ou=eDirectory,DC=cnmp,DC=ad")
@@ -94,7 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.port(Integer.parseInt(ldapPort))
 						.managerDn(ldapManagerDn)
 						.managerPassword(ldapPasswordDn);
-			// ldapEmbedded = true => servidor LDAP UnboundID
+			// ldapEmbedded = true => servidor LDAP UnboundID */
 			} else {
 				auth.ldapAuthentication()
 					.userSearchFilter("sAMAccountName={0}")
@@ -130,7 +149,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	/*
 	** Autenticação pelo servidor embedded LDAP de TESTE (UnboundID)  
 	 */
-	@Bean
+	/* @Bean
 	public DefaultSpringSecurityContextSource contextSource() {
 		if (Boolean.parseBoolean(ldapEmbedded)) {
 			return  new DefaultSpringSecurityContextSource(Arrays.asList("ldap://localhost:" 
@@ -139,7 +158,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			return  new DefaultSpringSecurityContextSource(Arrays.asList("ldap://hurley1.cnmp.ad:" 
 						+ "389" + "/"), "DC=cnmp,DC=ad");
 		}
-	}
+	} */
 
 	// Exclui os diretórios abaixo da camada de segurança do Spring Security
 	/* @Override
