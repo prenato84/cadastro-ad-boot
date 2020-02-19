@@ -19942,6 +19942,7 @@ dn: CN=GPCADUSER,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 objectClass: top
 objectClass: group
 cn: GPCADUSER
+member: CN=Teste Terceirizado SERVSAT,OU=Terceirizados,OU=eDirectory,DC=cnmp,DC=ad
 member: CN=Anderson Jardim Pereira,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 member: CN=Teste STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 member: CN=Paulo Renato Alves de Melo Castro,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
@@ -21012,6 +21013,9 @@ lastLogonTimestamp: 132260725471124054
 msDS-SupportedEncryptionTypes: 0
 mail: ErickJ@cnmp.mp.br
 
+######################################################################
+# USUARIOS DE TESTE UNBOUNDID
+
 # dn: CN\=LdapUserApp\,OU\=STI\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
 dn: CN=LdapUserApp,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 objectClass: top
@@ -21060,6 +21064,59 @@ dSCorePropagationData: 20171107210028.0Z
 dSCorePropagationData: 16010714223648.0Z
 lastLogonTimestamp: 132259205261379560
 msDS-SupportedEncryptionTypes: 0
+userPassword: $2y$12$PN4Uk5mmv7LjGwSoV0om/eATFef03XY4hcg/igWLiQRkN.95FtuuK
+
+# dn: CN\=Teste STI\,OU\=STI\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
+dn: CN=Teste STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: Teste STI
+sn: STI
+description: Conta de teste do SERVSAT/STI.
+physicalDeliveryOfficeName: SE-07
+givenName: Teste
+distinguishedName: CN=Teste STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+instanceType: 4
+whenCreated: 20171009161318.0Z
+whenChanged: 20191025163303.0Z
+displayName: Teste STI
+uSNCreated: 79475
+memberOf: CN=ADCONNECT,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+memberOf: CN=GPCADUSER,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+memberOf: CN=WEB_SERVIDORES,OU=NCT,OU=eDirectory,DC=cnmp,DC=ad
+uSNChanged: 14566107
+department: TESTE
+name: Teste STI
+objectGUID:: KNIRHWXvaESm7FXrp2OrEA==
+userAccountControl: 66048
+badPwdCount: 0
+codePage: 0
+countryCode: 0
+badPasswordTime: 132164947060590637
+lastLogoff: 0
+lastLogon: 131849669082365490
+pwdLastSet: 132164947710270393
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAJDHdmTwIgx7dCsL6WRIAAA==
+accountExpires: 0
+logonCount: 60
+sAMAccountName: TesteSTI
+sAMAccountType: 805306368
+userPrincipalName: TesteSTI@cnmp.ad
+lockoutTime: 0
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cnmp,DC=ad
+dSCorePropagationData: 20180710183207.0Z
+dSCorePropagationData: 20171108151457.0Z
+dSCorePropagationData: 20171107210028.0Z
+dSCorePropagationData: 16010714223648.0Z
+lastLogonTimestamp: 132164947837920417
+msDS-SupportedEncryptionTypes: 0
+mail: TesteSTI@cnmp.mp.br
+userPassword: $2y$12$PN4Uk5mmv7LjGwSoV0om/eATFef03XY4hcg/igWLiQRkN.95FtuuK
+
+######################################################################
 
 # dn: CN\=Leonardo da Costa Lopes\,OU\=STI\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
 dn: CN=Leonardo da Costa Lopes,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
@@ -22420,55 +22477,6 @@ dSCorePropagationData: 20171108151457.0Z
 dSCorePropagationData: 16010714042016.0Z
 lastLogonTimestamp: 132254776558008526
 mail: ronan@cnmp.mp.br
-
-# dn: CN\=Teste STI\,OU\=STI\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
-dn: CN=Teste STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-objectClass: top
-objectClass: person
-objectClass: organizationalPerson
-objectClass: user
-cn: Teste STI
-sn: STI
-description: Conta de teste do SERVSAT/STI.
-physicalDeliveryOfficeName: SE-07
-givenName: Teste
-distinguishedName: CN=Teste STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-instanceType: 4
-whenCreated: 20171009161318.0Z
-whenChanged: 20191025163303.0Z
-displayName: Teste STI
-uSNCreated: 79475
-memberOf: CN=ADCONNECT,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-memberOf: CN=GPCADUSER,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-memberOf: CN=WEB_SERVIDORES,OU=NCT,OU=eDirectory,DC=cnmp,DC=ad
-uSNChanged: 14566107
-department: TESTE
-name: Teste STI
-objectGUID:: KNIRHWXvaESm7FXrp2OrEA==
-userAccountControl: 66048
-badPwdCount: 0
-codePage: 0
-countryCode: 0
-badPasswordTime: 132164947060590637
-lastLogoff: 0
-lastLogon: 131849669082365490
-pwdLastSet: 132164947710270393
-primaryGroupID: 513
-objectSid:: AQUAAAAAAAUVAAAAJDHdmTwIgx7dCsL6WRIAAA==
-accountExpires: 0
-logonCount: 60
-sAMAccountName: TesteSTI
-sAMAccountType: 805306368
-userPrincipalName: TesteSTI@cnmp.ad
-lockoutTime: 0
-objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cnmp,DC=ad
-dSCorePropagationData: 20180710183207.0Z
-dSCorePropagationData: 20171108151457.0Z
-dSCorePropagationData: 20171107210028.0Z
-dSCorePropagationData: 16010714223648.0Z
-lastLogonTimestamp: 132164947837920417
-msDS-SupportedEncryptionTypes: 0
-mail: TesteSTI@cnmp.mp.br
 
 # dn: CN\=ADM_DOMINIO\,OU\=STI\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
 dn: CN=ADM_DOMINIO,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
@@ -24445,6 +24453,50 @@ dSCorePropagationData: 20180627150042.0Z
 dSCorePropagationData: 20171108151457.0Z
 dSCorePropagationData: 20171107210028.0Z
 dSCorePropagationData: 16010714223648.0Z
+
+####################################################################################
+# USUARIOS DE TESTE UNBOUNDID
+
+# dn: CN\=Teste Terceirizado SERVSAT\,OU\=Terceirizados\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
+dn: CN=Teste Terceirizado SERVSAT,OU=Terceirizados,OU=eDirectory,DC=cnmp,DC=ad
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: Teste Terceirizado SERVSAT
+sn: Terceirizado SERVSAT
+description: Teste Terceirizado SERVSAT
+givenName: Teste
+distinguishedName: CN=Teste Terceirizado SERVSAT,OU=Terceirizados,OU=eDirectory,
+ DC=cnmp,DC=ad
+instanceType: 4
+whenCreated: 20200214181110.0Z
+whenChanged: 20200214181152.0Z
+displayName: Teste Terceirizado SERVSAT
+uSNCreated: 16813746
+memberOf: CN=GP_ZEN_ADMIN,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+uSNChanged: 16813788
+name: Teste Terceirizado SERVSAT
+objectGUID:: TUqrCVVtJ0Sgn/aiSbGj5g==
+userAccountControl: 66048
+badPwdCount: 0
+codePage: 0
+countryCode: 0
+badPasswordTime: 0
+lastLogoff: 0
+lastLogon: 0
+pwdLastSet: 132261774709329839
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAJDHdmTwIgx7dCsL6CRsAAA==
+accountExpires: 9223372036854775807
+logonCount: 0
+sAMAccountName: tercservsat
+sAMAccountType: 805306368
+userPrincipalName: tercservsat@cnmp.ad
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cnmp,DC=ad
+dSCorePropagationData: 20200214181110.0Z
+dSCorePropagationData: 16010101000000.0Z
+userPassword: $2y$12$PN4Uk5mmv7LjGwSoV0om/eATFef03XY4hcg/igWLiQRkN.95FtuuK
 
 # dn: CN\=Sérgio de Almeida\,OU\=Terceirizados\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
 dn:: Q049U8OpcmdpbyBkZSBBbG1laWRhLE9VPVRlcmNlaXJpemFkb3MsT1U9ZURpcmVjdG9yeSxEQz1
@@ -30236,47 +30288,6 @@ dSCorePropagationData: 16010714223232.0Z
 lastLogonTimestamp: 132258068469530230
 msDS-SupportedEncryptionTypes: 0
 mail: DanielaGomes@cnmp.mp.br
-
-# dn: CN\=Teste Terceirizado SERVSAT\,OU\=Terceirizados\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
-dn: CN=Teste Terceirizado SERVSAT,OU=Terceirizados,OU=eDirectory,DC=cnmp,DC=ad
-objectClass: top
-objectClass: person
-objectClass: organizationalPerson
-objectClass: user
-cn: Teste Terceirizado SERVSAT
-sn: Terceirizado SERVSAT
-description: Teste Terceirizado SERVSAT
-givenName: Teste
-distinguishedName: CN=Teste Terceirizado SERVSAT,OU=Terceirizados,OU=eDirectory,
- DC=cnmp,DC=ad
-instanceType: 4
-whenCreated: 20200214181110.0Z
-whenChanged: 20200214181152.0Z
-displayName: Teste Terceirizado SERVSAT
-uSNCreated: 16813746
-memberOf: CN=GP_ZEN_ADMIN,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
-uSNChanged: 16813788
-name: Teste Terceirizado SERVSAT
-objectGUID:: TUqrCVVtJ0Sgn/aiSbGj5g==
-userAccountControl: 66048
-badPwdCount: 0
-codePage: 0
-countryCode: 0
-badPasswordTime: 0
-lastLogoff: 0
-lastLogon: 0
-pwdLastSet: 132261774709329839
-primaryGroupID: 513
-objectSid:: AQUAAAAAAAUVAAAAJDHdmTwIgx7dCsL6CRsAAA==
-accountExpires: 9223372036854775807
-logonCount: 0
-sAMAccountName: tercservsat
-sAMAccountType: 805306368
-userPrincipalName: tercservsat@cnmp.ad
-objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cnmp,DC=ad
-dSCorePropagationData: 20200214181110.0Z
-dSCorePropagationData: 16010101000000.0Z
-lastLogonTimestamp: 132261775123900135
 
 # dn: CN\=Bianca Mendonça Monteiro\,OU\=Terceirizados\,OU\=eDirectory\,DC\=cnmp\,DC\=ad
 dn:: Q049QmlhbmNhIE1lbmRvbsOnYSBNb250ZWlybyxPVT1UZXJjZWlyaXphZG9zLE9VPWVEaXJlY3R
