@@ -21033,6 +21033,7 @@ whenCreated: 20171005213252.0Z
 whenChanged: 20200211185048.0Z
 displayName: LdapUserApp
 uSNCreated: 67098
+memberOf: CN=ADM_DOMINIO,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 memberOf: CN=ADCONNECT,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 memberOf: CN=PASTA_STI,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 memberOf: CN=GPCADUSER,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
@@ -22483,6 +22484,7 @@ dn: CN=ADM_DOMINIO,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 objectClass: top
 objectClass: group
 cn: ADM_DOMINIO
+member: CN=LdapUserApp,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 member: CN=fortigate2,OU=Sistemas,DC=cnmp,DC=ad
 member: CN=fortigate1,OU=Sistemas,DC=cnmp,DC=ad
 member: CN=NCT,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
