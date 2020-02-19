@@ -64,7 +64,7 @@
             <artifactId>unboundid-ldapsdk</artifactId>
         </dependency>
 
-		<!--WebJars Bootstrap, Jquery e Jquery UI -->
+		<!--WebJars -->
 			<!-- Permite que as versões dos webjars fiquem agnósticas em relação à versão. basta adicionar essa dependência e remover as versões -->
 			<!-- <dependency>
 		        <groupId>org.webjars</groupId>
@@ -80,6 +80,11 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery</artifactId>
 			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.12.0</version>
 		</dependency>
 		
 		<dependency>

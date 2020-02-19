@@ -19,9 +19,15 @@
             <div style="color: blue" sec:authentication="name">Bob</div> </p>
             Papéis do usuário autenticado:
             <div style="color: red" sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</div> </p>
-            <form th:action="@{/logout}" method="post">
-                <button class="btn btn-info" type="submit" value="Sair">Sair</button>
-            </form>
+            <div class="form-group form-inline">
+ 
+                <a href="index.html" th:href="@{/index}" class="btn btn-info mr-3" role="button">Index</a>
+
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn btn-danger" type="submit" value="Sair">Sair</button>
+                </form>
+            </div>
+            
         </div>
     </body>
 </html>
