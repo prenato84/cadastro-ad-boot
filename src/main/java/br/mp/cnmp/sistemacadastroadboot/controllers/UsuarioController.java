@@ -1,14 +1,21 @@
 package br.mp.cnmp.sistemacadastroadboot.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class MainController {
+//@RequestMapping("usuario")
+public class UsuarioController {
 	
-/* 	@GetMapping("/403")
-	public String accessDenied() {
-	    return "errors/403";
-	} */
+	@GetMapping("usuarios")
+	public String listarUsuarios(Model model) {
+
+		model.addAttribute("usuarios", usuarioService.buscarTodos());
+
+	    return "hello";
+	}
 
 	/* @RequestMapping(value = "/default")
 	public String defaultAfterLogin(HttpServletRequest request) {

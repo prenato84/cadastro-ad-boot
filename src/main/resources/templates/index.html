@@ -85,17 +85,17 @@
   <section id="actions" class="py-4 mb-4 bg-light">
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col">
           <a href="#" class="btn btn-danger btn-block" data-toggle="modal" data-target="#addPostModal">
             <i class="fas fa-plus"></i> Add Usuário
           </a>
         </div>
-        <div class="col-md-3">
+        <div class="col">
           <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#addCategoryModal">
             <i class="fas fa-plus"></i> Add Grupo
           </a>
         </div>
-        <div class="col-md-3">
+        <div class="col">
           <a href="#" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addUserModal">
             <i class="fas fa-plus"></i> Add Email
           </a>
@@ -108,7 +108,7 @@
   <section id="posts">
     <div class="container">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col">
           <div class="card">
             <div class="card-header">
               <h4>Últimos Usuários</h4>
@@ -221,8 +221,8 @@
   <div class="modal fade" id="addPostModal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Add Post</h5>
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Add Usuário</h5>
           <button class="close" data-dismiss="modal">
             <span>&times;</span>
           </button>
@@ -230,34 +230,34 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="title">Title</label>
+              <label for="title">Nome</label>
               <input type="text" class="form-control">
             </div>
             <div class="form-group">
-              <label for="category">Category</label>
+              <label for="category">Setor</label>
               <select class="form-control">
-                <option value="">Web Development</option>
-                <option value="">Tech Gadgets</option>
-                <option value="">Business</option>
-                <option value="">Health & Wellness</option>
+                <option value="">STI</option>
+                <option value="">SGE</option>
+                <option value="">Terceirizados</option>
+                <option value="">Estagiários</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="image">Upload Image</label>
+              <label for="image">Enviar Imagem</label>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="image">
-                <label for="image" class="custom-file-label">Choose File</label>
+                <label for="image" class="custom-file-label">Escolher Arquivo</label>
               </div>
-              <small class="form-text text-muted">Max Size 3mb</small>
+              <small class="form-text text-muted">Tamanho máximo 3mb</small>
             </div>
             <div class="form-group">
-              <label for="body">Body</label>
+              <label for="body">Texto</label>
               <textarea name="editor1" class="form-control"></textarea>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+          <button class="btn btn-danger" data-dismiss="modal">Salvar Alterações</button>
         </div>
       </div>
     </div>
@@ -268,7 +268,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-success text-white">
-          <h5 class="modal-title">Add Category</h5>
+          <h5 class="modal-title">Add Grupo</h5>
           <button class="close" data-dismiss="modal">
             <span>&times;</span>
           </button>
@@ -276,13 +276,13 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="title">Title</label>
+              <label for="title">Nome</label>
               <input type="text" class="form-control">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-success" data-dismiss="modal">Save Changes</button>
+          <button class="btn btn-success" data-dismiss="modal">Salvar Alterações</button>
         </div>
       </div>
     </div>
@@ -293,7 +293,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-warning text-white">
-          <h5 class="modal-title">Add User</h5>
+          <h5 class="modal-title">Add Email</h5>
           <button class="close" data-dismiss="modal">
             <span>&times;</span>
           </button>
@@ -301,7 +301,7 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">Nome Público</label>
               <input type="text" class="form-control">
             </div>
             <div class="form-group">
@@ -309,17 +309,24 @@
               <input type="email" class="form-control">
             </div>
             <div class="form-group">
-              <label for="password">Password</label>
+              <label for="email">Licença</label>
+              <select class="form-control">
+                <option value="">E1</option>
+                <option value="">E3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="password">Senha</label>
               <input type="password" class="form-control">
             </div>
             <div class="form-group">
-              <label for="password2">Confirm Password</label>
+              <label for="password2">Confirmar Senha</label>
               <input type="password" class="form-control">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-warning" data-dismiss="modal">Save Changes</button>
+          <button class="btn btn-warning" data-dismiss="modal">Salvar Alterações</button>
         </div>
       </div>
     </div>
