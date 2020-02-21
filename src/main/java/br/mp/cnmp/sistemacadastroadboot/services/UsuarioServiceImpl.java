@@ -3,6 +3,7 @@ package br.mp.cnmp.sistemacadastroadboot.services;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 //import java.util.Collections;
 import java.util.Date;
@@ -39,6 +40,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 		this.usuarioRepo = usuarioRepo;
 	}
 
+	/*
+		TypedSort<Person> person = Sort.sort(Person.class);
+
+		TypedSort<Person> sort = person.by(Person::getFirstname).ascending()
+		.and(person.by(Person::getLastname).descending());
+	*/
+
+	@Override
+	public List<Usuario> testeBuscar() {
+		/*
+			objectClass: top
+			objectClass: person
+			objectClass: organizationalPerson
+			objectClass: user
+		*/
+		List<String> classesObjetos = Arrays.asList("top", "person", "organizationalPerson", "user");
+
+		return usuarioRepo.findAllByClassesObjetoAndUnidadeOrganizacional(classesObjetos, "OU=STI");
+	}
+
 	@Override
 	public List<Usuario> buscarTodos() {
 
@@ -48,8 +69,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		List<Usuario> usuariosSemId = new ArrayList<>();
 		List<Usuario> usuariosSemGrupo = new ArrayList<>();
 		
+		// filtra os usuário buscados para deixar apenas os que interessam
 		for (Usuario usuario : usuariosBuscados) {
-			String id = usuario.getId().toString(); //id=cn=OESCommonProxy_iprint,ou=iPrint
+			String id = usuario.getId().toString(); // id=CN=PESSOAL,OU=USUARIOS,OU=CNMP,DC=cnmp,DC=ad
 			//System.out.println("ID = " + id);
 			
 			if ( usuario.getId().isEmpty() ) { // usuários com id vazio
@@ -57,8 +79,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			// Filtrar pelos seguintes Conextos: IMPRESSORAS, COMPUTADORES, Users, COMPUTADORES DESCONHECIDOS, COMPUTADORES-STI, NOTEBOOKS, Domain Controllers, 
 			// melhorar pra filtrar por tipoo do objeto
 			} else if ( id.contains("OU=") ) {
-				// id=CN=PESSOAL,OU=USUARIOS,OU=CNMP,DC=cnmp,DC=ad
-				// id=CN=Paulo Renato Alves de Melo Castro,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+				// id=CN=Teste AD,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 				String contexto = id.split(",OU=")[1];
 				//System.out.println("CONTEXTO = " + contexto);
 				if (!contexto.contentEquals("IMPRESSORAS") && !contexto.contentEquals("COMPUTADORES") && !contexto.contentEquals("Users") 
@@ -132,7 +153,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 			usuario.setChefe(nomeChefe.substring(3));
 		}	
 
+		// Set<Name> gruposSeguranca
+		if (usuario.getGruposSeguranca() != null && !usuario.getGruposSeguranca().isEmpty()) {
 
+			List<String> grupos = new ArrayList<String>();
+			//grupos.addAll(usuario.getGruposSeguranca());
+		}
+		
 	}
 	
 	@Override
@@ -201,6 +228,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 				.build();
 	}
 	
+	public long quantidadeUsuarios() {
+		return usuarioRepo.count();
+	} 
+
 	private void adicionarAtributosSeguranca(Usuario usuario) {
 		try {
 			Calendar utcTime = Calendar.getInstance();

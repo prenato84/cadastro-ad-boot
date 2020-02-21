@@ -1,11 +1,14 @@
 package br.mp.cnmp.sistemacadastroadboot.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.mp.cnmp.sistemacadastroadboot.domain.Usuario;
 import br.mp.cnmp.sistemacadastroadboot.services.UsuarioService;
 
 @Controller
@@ -25,6 +28,12 @@ public class UsuarioController {
 	public String listarUsuarios(Model model) {
 
 		model.addAttribute("usuarios", usuarioService.buscarTodos());
+
+		System.out.println("Quantidade usuários: " + usuarioService.quantidadeUsuarios());
+
+		//List<Usuario> teste = usuarioService.testeBuscar();
+
+		//System.out.println("Teste: " + teste);
 
 	    return "hello";
 	}

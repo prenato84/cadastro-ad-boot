@@ -1,6 +1,7 @@
 package br.mp.cnmp.sistemacadastroadboot.domain;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import javax.naming.Name;
@@ -17,6 +18,29 @@ import org.springframework.ldap.odm.annotations.Transient;
 import org.springframework.ldap.support.LdapUtils;
 
 //dn: cn=TesteSTI,ou=STI,o=cnmp
+/* dn: CN=STI_TERC_MONTREAL,OU=STI,OU=DEPARTAMENTOS,OU=CNMP,DC=cnmp,DC=ad
+objectClass: top
+objectClass: group */
+
+/* dn: CN=STI-ELDER,OU=COMPUTADORES-STI,OU=CNMP,DC=cnmp,DC=ad
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+objectClass: computer */
+
+/* dn: CN=STI-S-1,OU=OBJETOS,OU=IMPRESSORAS,OU=CNMP,DC=cnmp,DC=ad
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user */
+
+/* dn: CN=HURLEY2,OU=Domain Controllers,DC=cnmp,DC=ad
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+objectClass: computer */
 																					// remover os códigos comentados para usar UsuarioServiceImpl (usa odm)
 @Entry(objectClasses = { "top", "person", "organizationalperson", "user" }, base="OU=eDirectory,DC=cnmp,DC=ad")
 public class Usuario implements Comparable<Usuario>{
@@ -58,6 +82,9 @@ public class Usuario implements Comparable<Usuario>{
     
     @Attribute(name = "memberOf")
 	private Set<Name> gruposSeguranca;
+
+	@Attribute(name = "objectClass")
+	private List<String> classesObjeto;
 
 	@Attribute(name = "manager")
 	private String chefe;
@@ -194,6 +221,14 @@ public class Usuario implements Comparable<Usuario>{
 		this.gruposSeguranca = gruposSeguranca;
 	}
 
+	public List<String> getClassesObjeto() {
+		return classesObjeto;
+	}
+
+	public void setClassesObjeto(List<String> classesObjeto) {
+		this.classesObjeto = classesObjeto;
+	}
+
 	public String getChefe() {
 		return chefe;
 	}
@@ -218,7 +253,7 @@ public class Usuario implements Comparable<Usuario>{
 		this.listas = listas;
 	}
 
-	/****************************** Getters and Setters End ******************************/
+	/****************************** Fim Getters and Setters ******************************/
 	
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);

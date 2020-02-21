@@ -18,4 +18,8 @@ public interface UsuarioService {
 
 	Usuario atualizar(Usuario usuario);
 
+	long quantidadeUsuarios();
+
+	public List<Usuario> testeBuscar();
+
 }
