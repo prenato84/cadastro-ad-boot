@@ -6,15 +6,15 @@ import org.springframework.data.ldap.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import br.mp.cnmp.domain.Usuario;
+import br.mp.cnmp.sistemacadastroadboot.domain.Usuario;
 
 @Repository
 //public interface UsuarioRepo extends CrudRepository<Usuario, Name> 
 //public interface UsuarioRepo extends LdapRepository<Usuario>
 public interface UsuarioRepo extends CrudRepository<Usuario, Name>{
 
-	@Query("(uid={0})")
-	Usuario findByUid(String uid);
+	@Query("(sAMAccountName={0})")
+	Usuario findByLogin(String login);
 
 	/*default <S extends Usuario> S save(S entity)
 

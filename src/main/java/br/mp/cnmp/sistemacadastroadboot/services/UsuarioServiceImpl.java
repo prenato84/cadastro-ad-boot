@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+//import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +13,8 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
@@ -28,7 +28,7 @@ import br.mp.cnmp.sistemacadastroadboot.repositories.UsuarioRepo;
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
-	private static final Log logger = LogFactory.getLog(UsuarioServiceImpl.class);
+	//private static final Log logger = LogFactory.getLog(UsuarioServiceImpl.class);
 	
 	private LdapTemplate ldapTemplate;
 	private UsuarioRepo usuarioRepo;
@@ -41,6 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public List<Usuario> buscarTodos() {
+
 		Iterable<Usuario> usuariosBuscados = usuarioRepo.findAll();
 		List<Usuario> usuarios = new ArrayList<>();
 		
@@ -49,14 +50,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		for (Usuario usuario : usuariosBuscados) {
 			String id = usuario.getId().toString(); //id=cn=OESCommonProxy_iprint,ou=iPrint
+			//System.out.println("ID = " + id);
 			
 			if ( usuario.getId().isEmpty() ) { // usuários com id vazio
 				usuariosSemId.add(usuario);
-			// Filtrar pelos seguintes Conextos: iPrint, Servicos, groupwise, users, Spiller
-			} else if ( id.contains("ou=") ) {
-				String contexto = id.split(",ou=")[1];
-				if (!contexto.contentEquals("iPrint") && !contexto.contentEquals("Servicos") && !contexto.contentEquals("groupwise") && !contexto.contentEquals("users") && !contexto.contentEquals("Spiller")) {
-					configuraContextoELogin(usuario);
+			// Filtrar pelos seguintes Conextos: IMPRESSORAS, COMPUTADORES, Users, COMPUTADORES DESCONHECIDOS, COMPUTADORES-STI, NOTEBOOKS, Domain Controllers, 
+			// melhorar pra filtrar por tipoo do objeto
+			} else if ( id.contains("OU=") ) {
+				// id=CN=PESSOAL,OU=USUARIOS,OU=CNMP,DC=cnmp,DC=ad
+				// id=CN=Paulo Renato Alves de Melo Castro,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
+				String contexto = id.split(",OU=")[1];
+				//System.out.println("CONTEXTO = " + contexto);
+				if (!contexto.contentEquals("IMPRESSORAS") && !contexto.contentEquals("COMPUTADORES") && !contexto.contentEquals("Users") 
+					&& !contexto.contentEquals("COMPUTADORES DESCONHECIDOS") && !contexto.contentEquals("COMPUTADORES-STI") && !contexto.contentEquals("NOTEBOOKS") 
+					&& !contexto.contentEquals("Domain Controllers")) {
+					
+					configuraAtributosUsuario(usuario);
 					usuarios.add(usuario);
 				}
 			} else { // usuários sem contexto (ou)
@@ -66,9 +75,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		//System.out.println("Usuários sem ID: " + usuariosSemId);
 		//System.out.println("Usuários sem grupo: " + usuariosSemGrupo);
-		/*for (Usuario usuario : usuarios) {
-			logger.info("Usuário: " + usuario + "\n");
-		}*/
+		/* for (Usuario usuario : usuarios) {
+			System.out.println("Usuário: " + usuario + "\n");
+		} */
 		
 		//Collections.sort((List<Usuario>) usuarios);
 		
@@ -78,9 +87,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 	
 	@Override
-	public boolean existeUsuario(String uid) {
+	public boolean existeUsuario(String login) {
 		
-		Usuario usuario = usuarioRepo.findByUid(uid);
+		Usuario usuario = usuarioRepo.findByLogin(login);
 		
 		if (usuario == null) {
 			return false;
@@ -90,10 +99,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 	
 	@Override
-	public Usuario buscarPorUid(String uid) {
-		Usuario usuario = usuarioRepo.findByUid(uid);
+	public Usuario buscarPorLogin(String login) {
+		Usuario usuario = usuarioRepo.findByLogin(login);
 		
-		configuraContextoELogin(usuario);
+		configuraAtributosUsuario(usuario);
 		
 		return usuario; 
 	}
@@ -103,17 +112,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuarioRepo.delete(usuario);
 	}
 	
-	private void configuraContextoELogin(Usuario usuario) {
+	private void configuraAtributosUsuario(Usuario usuario) {
 		
 		String id = usuario.getId().toString();
+		String chefe = usuario.getChefe();
 		
-		if ( id.contains("ou=") ) {
-			//id=cn=ByDalloul,ou=APAGAR
+		if ( id.contains("OU=") ) {
+			// id=CN=PESSOAL,OU=USUARIOS,OU=CNMP,DC=cnmp,DC=ad
+			// id=CN=Paulo Renato Alves de Melo Castro,OU=STI,OU=eDirectory,DC=cnmp,DC=ad
 			String contexto = id.split(",")[1];
 			
-			usuario.setLogin(usuario.getUid());
-			usuario.setContexto(contexto.substring(3));
+			usuario.setLogin(usuario.getLogin());
+			usuario.setUnidadeOrganizacional(contexto.substring(3));
 		}
+
+		if (chefe != null && !chefe.isEmpty()) {
+			String nomeChefe = chefe.split(",OU=")[0];
+
+			usuario.setChefe(nomeChefe.substring(3));
+		}	
+
+
 	}
 	
 	@Override
@@ -121,11 +140,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 		//logger.info("Usuario antes de salvar: " + usuario);
 		
 		if (usuario.getId().isEmpty()) { //caso esteja criando um novo usuário
-			logger.info("********* usuário com ID vazio - Criando Novo Usuário *********");
+			//logger.info("********* usuário com ID vazio - Criando Novo Usuário *********");
 		    
 			return criar(usuario);
 		} else { //caso esteja alterando um usuário existente
-			logger.info("********* Alterando Usuário Existente *********");
+			//logger.info("********* Alterando Usuário Existente *********");
 			//configuraContextoELogin(usuario);
 			
 			//Usuario usuarioSalvo = usuarioRepo.save(usuario);
@@ -140,7 +159,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		
 		Name id = buildId(usuario);
 		
-		if ( usuarioRepo.exists(id) ) {
+		if ( usuarioRepo.existsById(id)) {
 			return null;
 		} else {
 			DirContextAdapter context = new DirContextAdapter(id);
@@ -170,7 +189,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	//id: cn=TesteSTI,ou=STI,o=cnmp
 	private Name buildId(Usuario usuario) {
 		/*Name dn = buildDn(usuario.getContexto(), usuario.getLogin());*/
-		Name id = buildId(usuario.getContexto(), usuario.getUid());
+		Name id = buildId(usuario.getUnidadeOrganizacional(), usuario.getLogin());
 		return id;
 	}
 
@@ -231,27 +250,33 @@ public class UsuarioServiceImpl implements UsuarioService {
 	 * description: Matrícula: 82000
 	 * ou: SERVSAT
 	 */
+	
 	private void mapToContext (Usuario usuario, DirContextOperations context) {
-		context.setAttributeValues("objectclass", new String[] {"top", "person", "organizationalPerson", "inetOrgPerson"});
+		context.setAttributeValues("objectclass", new String[] {"top", "person", "organizationalperson", "user"});
 		
-		/*context.setAttributeValue("cn", usuario.getLogin());*/
-		context.setAttributeValue("cn", usuario.getUid());
-		context.setAttributeValue("uid", usuario.getUid());
-		context.setAttributeValue("givenName", usuario.getPrimeiroNome());
+		context.setAttributeValue("cn", usuario.getLogin());
 		context.setAttributeValue("sn", usuario.getSobrenome());
-		context.setAttributeValue("userPassword", usuario.getSenhaInicial());
-		
-		context.setAttributeValue("fullName", usuario.getNomeCompleto());
-		context.setAttributeValue("mail", usuario.getEmail());
 		context.setAttributeValue("title", usuario.getTitulo());
-		
+		context.setAttributeValue("description", "Matrícula: " + usuario.getDescricao());
 		if (usuario.getTelefone().length() != 0) {
 			context.setAttributeValue("telephonenumber", usuario.getTelefone());
 		}
-		
-		context.setAttributeValue("l", usuario.getLocalizacao());
-		context.setAttributeValue("description", "Matrícula: " + usuario.getDescricao());
+		context.setAttributeValue("givenName", usuario.getPrimeiroNome());
+		context.setAttributeValue("displayName", usuario.getNomeCompleto());
+		context.setAttributeValue("department", usuario.getDepartamento());
+
 		context.setAttributeValue("ou", usuario.getDepartamento());
+		context.setAttributeValue("name", usuario.getNomeCompleto());
+		context.setAttributeValue("sAMAccountName", usuario.getLogin());
+		context.setAttributeValue("userPrincipalName", usuario.getLogin() + "@cnmp.ad");
+
+		context.setAttributeValue("objectCategory", "CN=Person,CN=Schema,CN=Configuration,DC=cnmp,DC=ad");
+
+		context.setAttributeValue("mail", usuario.getEmail());	
+		if (usuario.getChefe().length() != 0) {
+			context.setAttributeValue("manager", usuario.getChefe());
+		}		
+		
 	}
 	
 }

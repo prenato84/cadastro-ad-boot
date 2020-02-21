@@ -8,9 +8,9 @@ public interface UsuarioService {
 
 	List<Usuario> buscarTodos();
 	
-	boolean existeUsuario(String uid);
+	boolean existeUsuario(String login);
 
-	Usuario buscarPorUid(String uid);
+	Usuario buscarPorLogin(String login);
 
 	void remover(Usuario usuario);
 

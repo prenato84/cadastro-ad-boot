@@ -5,10 +5,10 @@ import java.util.Set;
 
 import javax.naming.Name;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.DnAttribute;
 import org.springframework.ldap.odm.annotations.Entry;
@@ -18,25 +18,19 @@ import org.springframework.ldap.support.LdapUtils;
 
 //dn: cn=TesteSTI,ou=STI,o=cnmp
 																					// remover os códigos comentados para usar UsuarioServiceImpl (usa odm)
-@Entry(objectClasses = { "inetorgperson", "organizationalperson", "person", "top" }/*, base="o=cnmp"*/)
+@Entry(objectClasses = { "top", "person", "organizationalperson", "user" }, base="OU=eDirectory,DC=cnmp,DC=ad")
 public class Usuario implements Comparable<Usuario>{
 
+	// Distinguished Name
 	@Id
 	private Name id;
 	
 	@Transient
 	@DnAttribute(value = "ou", index = 0)
-    private String contexto;
-	
-	@Transient
-    @DnAttribute(value = "cn", index = 0)
-    private String login;
+    private String unidadeOrganizacional;
     
-    @Attribute(name = "uid")
-    private String uid;
-
-    @Attribute(name = "givenName")
-    private String primeiroNome;
+    @Attribute(name = "sAMAccountName")
+    private String login;
     
     @Attribute(name = "mail")
     private String email;
@@ -44,32 +38,29 @@ public class Usuario implements Comparable<Usuario>{
     @Attribute(name = "telephoneNumber")
     private String telefone;
     
-    @Attribute(name = "l")
-    private String localizacao;
+    @Attribute(name = "department")
+    private String departamento;
     
     @Attribute(name = "description")
     private String descricao;
-    
-    @Attribute(name = "ou")
-    private String departamento;
-    
-    @Attribute(name = "sn")
+
+	@Attribute(name = "givenName")
+	private String primeiroNome;
+	
+	@Attribute(name = "sn")
     private String sobrenome;
 
-    @Attribute(name = "fullName")
+    @Attribute(name = "name")
     private String nomeCompleto;
 
     @Attribute(name = "title")
     private String titulo;
     
-    @Attribute(name = "groupMembership")
-	private Set<Name> permissoes;
-    
-    @Attribute(name = "securityEquals")
-	private Set<Name> permissoesSeguranca;
-    
-    @Attribute(name = "iPrintiCMPrinterList")
-	private Set<Name> impressoras;
+    @Attribute(name = "memberOf")
+	private Set<Name> gruposSeguranca;
+
+	@Attribute(name = "manager")
+	private String chefe;
     
     @Transient
     private String[] grupos;
@@ -80,7 +71,7 @@ public class Usuario implements Comparable<Usuario>{
     /*@Transient
 	private String[] impressoras;*/
 	
-    @Transient
+    /* @Transient
 	private String[] listasEmail;
 
     @Transient
@@ -99,10 +90,7 @@ public class Usuario implements Comparable<Usuario>{
 	private String destinatarioEmail;
 
     @Transient
-	private String[] copiasEmail;
-    
-    /*@Transient
-    private List<String> permissoes; //groupMembership */
+	private String[] copiasEmail; */
 	
 	/****************************** Getters and Setters ******************************/
 
@@ -118,12 +106,12 @@ public class Usuario implements Comparable<Usuario>{
 		this.id = LdapUtils.newLdapName(id);
 	}
 
-	public String getContexto() {
-		return contexto;
+	public String getUnidadeOrganizacional() {
+		return unidadeOrganizacional;
 	}
 
-	public void setContexto(String contexto) {
-		this.contexto = contexto;
+	public void setUnidadeOrganizacional(String unidadeOrganizacional) {
+		this.unidadeOrganizacional = unidadeOrganizacional;
 	}
 	
 	public String getLogin() {
@@ -132,22 +120,6 @@ public class Usuario implements Comparable<Usuario>{
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-	public String getPrimeiroNome() {
-		return primeiroNome;
-	}
-
-	public void setPrimeiroNome(String primeiroNome) {
-		this.primeiroNome = primeiroNome;
 	}
 
 	public String getEmail() {
@@ -166,12 +138,12 @@ public class Usuario implements Comparable<Usuario>{
 		this.telefone = telefone;
 	}
 
-	public String getLocalizacao() {
-		return localizacao;
+	public String getDepartamento() {
+		return departamento;
 	}
 
-	public void setLocalizacao(String localizacao) {
-		this.localizacao = localizacao;
+	public void setDepartamento(String departamento) {
+		this.departamento = departamento;
 	}
 
 	public String getDescricao() {
@@ -182,12 +154,12 @@ public class Usuario implements Comparable<Usuario>{
 		this.descricao = descricao;
 	}
 
-	public String getDepartamento() {
-		return departamento;
+	public String getPrimeiroNome() {
+		return primeiroNome;
 	}
 
-	public void setDepartamento(String departamento) {
-		this.departamento = departamento;
+	public void setPrimeiroNome(String primeiroNome) {
+		this.primeiroNome = primeiroNome;
 	}
 
 	public String getSobrenome() {
@@ -214,28 +186,20 @@ public class Usuario implements Comparable<Usuario>{
 		this.titulo = titulo;
 	}
 	
-	public Set<Name> getPermissoes() {
-		return permissoes;
+	public Set<Name> getGruposSeguranca() {
+		return gruposSeguranca;
 	}
 
-	public void setPermissoes(Set<Name> permissoes) {
-		this.permissoes = permissoes;
-	}
-	
-	public Set<Name> getPermissoesSeguranca() {
-		return permissoesSeguranca;
+	public void setGruposSeguranca(Set<Name> gruposSeguranca) {
+		this.gruposSeguranca = gruposSeguranca;
 	}
 
-	public void setPermissoesSeguranca(Set<Name> permissoesSeguranca) {
-		this.permissoesSeguranca = permissoesSeguranca;
+	public String getChefe() {
+		return chefe;
 	}
 
-	public Set<Name> getImpressoras() {
-		return impressoras;
-	}
-
-	public void setImpressoras(Set<Name> impressoras) {
-		this.impressoras = impressoras;
+	public void setChefe(String chefe) {
+		this.chefe = chefe;
 	}
 
 	public String[] getGrupos() {
@@ -254,70 +218,6 @@ public class Usuario implements Comparable<Usuario>{
 		this.listas = listas;
 	}
 
-	/*public String[] getImpressoras() {
-		return impressoras;
-	}
-
-	public void setImpressoras(String[] impressoras) {
-		this.impressoras = impressoras;
-	}*/
-
-	public String[] getListasEmail() {
-		return listasEmail;
-	}
-
-	public void setListasEmail(String[] listasEmail) {
-		this.listasEmail = listasEmail;
-	}
-
-	public boolean isNaoEnviarEmail() {
-		return naoEnviarEmail;
-	}
-
-	public void setNaoEnviarEmail(boolean naoEnviarEmail) {
-		this.naoEnviarEmail = naoEnviarEmail;
-	}
-
-	public String getListaEmailUsuario() {
-		return listaEmailUsuario;
-	}
-
-	public void setListaEmailUsuario(String listaEmailUsuario) {
-		this.listaEmailUsuario = listaEmailUsuario;
-	}
-
-	public String getSenhaInicial() {
-		return senhaInicial;
-	}
-
-	public void setSenhaInicial(String senhaInicial) {
-		this.senhaInicial = senhaInicial;
-	}
-
-	public String getTextoEmail() {
-		return textoEmail;
-	}
-
-	public void setTextoEmail(String textoEmail) {
-		this.textoEmail = textoEmail;
-	}
-
-	public String getDestinatarioEmail() {
-		return destinatarioEmail;
-	}
-
-	public void setDestinatarioEmail(String destinatarioEmail) {
-		this.destinatarioEmail = destinatarioEmail;
-	}
-
-	public String[] getCopiasEmail() {
-		return copiasEmail;
-	}
-
-	public void setCopiasEmail(String[] copiasEmail) {
-		this.copiasEmail = copiasEmail;
-	}
-
 	/****************************** Getters and Setters End ******************************/
 	
 	public boolean equals(Object obj) {
@@ -333,21 +233,21 @@ public class Usuario implements Comparable<Usuario>{
 	}
 
 	/*
-	 * Métodos para ordenação de objetos "Usuario" por meio do atributo "uid"
+	 * Métodos para ordenação de objetos "Usuario" por meio do atributo "login"
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
 	public int compareTo(Usuario usuario) {
 		
-		return this.uid.compareToIgnoreCase(usuario.getUid());
+		return this.login.compareToIgnoreCase(usuario.getLogin());
 	}
 	
 	public static Comparator<Usuario> UsuarioNameComparator = new Comparator<Usuario>() {
 	
 		public int compare(Usuario u1, Usuario u2) {
 		
-		String u1Login = u1.getUid().toUpperCase();
-		String u2Login = u2.getUid().toUpperCase();
+		String u1Login = u1.getLogin().toUpperCase();
+		String u2Login = u2.getLogin().toUpperCase();
 		
 		//ascending order
 		return u1Login.compareTo(u2Login);
