@@ -73,6 +73,13 @@
             <artifactId>unboundid-ldapsdk</artifactId>
         </dependency>
 
+		<!-- Lib para auxiliar na execução de comandos Powershell pelo Java -->
+		<dependency>
+			<groupId>com.profesorfalken</groupId>
+			<artifactId>jPowerShell</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
 		<!--WebJars -->
 			<!-- Permite que as versões dos webjars fiquem agnósticas em relação à versão. basta adicionar essa dependência e remover as versões -->
 			<!-- <dependency>
