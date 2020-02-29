@@ -35,12 +35,12 @@ public class UsuarioController {
 
 		System.out.println("Quantidade usuários: " + usuarioService.quantidadeUsuarios());
 
-		//List<Usuario> teste = usuarioService.testeBuscar();
+		List<Usuario> teste = usuarioService.testeBuscarLdapTemplate();
 
-		//System.out.println("Teste: " + teste);
+		System.out.println("Quantidade usuários LdapTemplate: " + teste.size());
 
 		//Creates PowerShell session (we can execute several commands in the same session)
-		try (PowerShell powerShell = PowerShell.openSession()) {
+		/* try (PowerShell powerShell = PowerShell.openSession()) {
 			
 			String name = "'testepower'";
 			String base = "'OU=STI,OU=eDirectory,DC=cnmp,DC=ad'";
@@ -88,7 +88,7 @@ public class UsuarioController {
 			//Maybe try in another way?
 	
 			System.out.println(ex);
-		}
+		} */
 
 	    return "hello";
 	}

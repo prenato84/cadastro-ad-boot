@@ -8,6 +8,7 @@ import java.util.Calendar;
 //import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.Name;
 import javax.naming.directory.BasicAttribute;
@@ -24,6 +25,7 @@ import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.stereotype.Service;
 
 import br.mp.cnmp.sistemacadastroadboot.domain.Usuario;
+import br.mp.cnmp.sistemacadastroadboot.repositories.OdmUsuarioRepo;
 import br.mp.cnmp.sistemacadastroadboot.repositories.UsuarioRepo;
 
 @Service
@@ -33,11 +35,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	private LdapTemplate ldapTemplate;
 	private UsuarioRepo usuarioRepo;
+	private OdmUsuarioRepo odmUsuarioRepo;
 	
 	@Autowired
-	public UsuarioServiceImpl(LdapTemplate ldapTemplate, UsuarioRepo usuarioRepo) {
+	public UsuarioServiceImpl(LdapTemplate ldapTemplate, UsuarioRepo usuarioRepo, OdmUsuarioRepo odmUsuarioRepo) {
 		this.ldapTemplate = ldapTemplate;
 		this.usuarioRepo = usuarioRepo;
+		this.odmUsuarioRepo = odmUsuarioRepo;
 	}
 
 	/*
@@ -61,13 +65,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public List<Usuario> testeBuscarLdapTemplate() {
+		List<Usuario> usuarios = odmUsuarioRepo.findAll();
+
+		Usuario usuario = odmUsuarioRepo.findBySAMAccountName("paulorenato");
+
+		System.out.println("Usuario: " + usuario);
+		//List<Usuario> usuarios = ldapTemplate.search(
+		//	query().base("ou=STI,ou=eDirectory"), Usuario.class);
+		//Search for all entries with objectclass person starting at dc=261consulting,dc=com
+
+		return usuarios;
+	}
+
+	@Override
 	public List<Usuario> buscarTodos() {
 
 		Iterable<Usuario> usuariosBuscados = usuarioRepo.findAll();
 		List<Usuario> usuarios = new ArrayList<>();
 		
 		List<Usuario> usuariosSemId = new ArrayList<>();
-		List<Usuario> usuariosSemGrupo = new ArrayList<>();
+		List<Usuario> usuariosSemOu = new ArrayList<>();
 		
 		// filtra os usuário buscados para deixar apenas os que interessam
 		for (Usuario usuario : usuariosBuscados) {
@@ -87,10 +105,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 					&& !contexto.contentEquals("Domain Controllers")) {
 					
 					configuraAtributosUsuario(usuario);
+
+					/* if (usuarioConfigurado.getGrupos() != null) {
+						System.out.println(usuarioConfigurado.getGrupos());
+					} */
+
 					usuarios.add(usuario);
 				}
 			} else { // usuários sem contexto (ou)
-				usuariosSemGrupo.add(usuario);
+				usuariosSemOu.add(usuario);
 			}
 		}
 		
@@ -154,12 +177,24 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}	
 
 		// Set<Name> gruposSeguranca
-		if (usuario.getGruposSeguranca() != null && !usuario.getGruposSeguranca().isEmpty()) {
+		Set<Name> gruposSeguranca = usuario.getGruposSeguranca();
+		if (gruposSeguranca != null && !gruposSeguranca.isEmpty()) {
 
 			List<String> grupos = new ArrayList<String>();
 			//grupos.addAll(usuario.getGruposSeguranca());
+
+		 /* CN=SPR_TERC,OU=SPR,OU=DEPARTAMENTOS,OU=CNMP,DC=cnmp,DC=ad
+			CN=PASTA_CES,OU=COMISSOES,OU=DEPARTAMENTOS,OU=CNMP,DC=cnmp,DC=ad */
+			for(Name grupo : gruposSeguranca){
+				String nomeGrupo = grupo.toString().split(",")[0];
+				nomeGrupo = nomeGrupo.substring(3);
+			
+				grupos.add(nomeGrupo);
+			 }
+
+			 System.out.println(grupos);
+			 usuario.setGrupos(grupos);
 		}
-		
 	}
 	
 	@Override

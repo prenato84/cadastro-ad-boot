@@ -22,4 +22,6 @@ public interface UsuarioService {
 
 	public List<Usuario> testeBuscar();
 
+	public List<Usuario> testeBuscarLdapTemplate();
+
 }

@@ -2,11 +2,8 @@ package br.mp.cnmp.sistemacadastroadboot.repositories;
 
 import java.util.List;
 
-import javax.naming.Name;
-
 import org.springframework.data.ldap.repository.LdapRepository;
 import org.springframework.data.ldap.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import br.mp.cnmp.sistemacadastroadboot.domain.Usuario;

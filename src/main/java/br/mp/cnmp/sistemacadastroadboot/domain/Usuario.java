@@ -90,7 +90,7 @@ public class Usuario implements Comparable<Usuario>{
 	private String chefe;
     
     @Transient
-    private String[] grupos;
+    private List<String> grupos;
 
     @Transient
 	private String[] listas;
@@ -237,11 +237,11 @@ public class Usuario implements Comparable<Usuario>{
 		this.chefe = chefe;
 	}
 
-	public String[] getGrupos() {
+	public List<String> getGrupos() {
 		return grupos;
 	}
 
-	public void setGrupos(String[] grupos) {
+	public void setGrupos(List<String> grupos) {
 		this.grupos = grupos;
 	}
 
