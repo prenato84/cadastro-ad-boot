@@ -70,7 +70,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 		Usuario usuario = odmUsuarioRepo.findBySAMAccountName("paulorenato");
 
-		System.out.println("Usuario: " + usuario);
+		//System.out.println("Usuario: " + usuario);
 		//List<Usuario> usuarios = ldapTemplate.search(
 		//	query().base("ou=STI,ou=eDirectory"), Usuario.class);
 		//Search for all entries with objectclass person starting at dc=261consulting,dc=com
@@ -192,7 +192,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 				grupos.add(nomeGrupo);
 			 }
 
-			 System.out.println(grupos);
+			 //System.out.println(grupos);
 			 usuario.setGrupos(grupos);
 		}
 	}
